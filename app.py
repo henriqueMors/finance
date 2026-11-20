@@ -22,3 +22,23 @@ st.header("Informações Financeiras de Ações")
 #USIM5.SA
 #VALE5.SA
 #PCAR4.SA
+
+tickerSimbolo = st.text_input(
+    "Digite o símbolo da ação (ex: BBDC3.SA):", "BBDC3.SA"
+    )
+
+tickerData = yf.Ticker(tickerSimbolo)
+
+tickerDF = tickerData.history(
+    period="1d", 
+    start="2020-01-01", 
+    end="2024-12-31"
+    )
+
+st.header("Gráfico de fechamento")
+
+st.line_chart(tickerDF.Close)
+
+st.header("Gráfico de volume")
+
+st.line_chart(tickerDF.Volume)
