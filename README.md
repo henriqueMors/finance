@@ -9,6 +9,14 @@ Painel web feito em **Python** com **Streamlit** para acompanhar ações da bols
 - O carrossel **pausa ao passar o mouse**, para facilitar a leitura
 - **Seleção do ativo** por lista, com a opção de **digitar qualquer outro código** (ex.: `PETR3`)
 - O sufixo `.SA` é acrescentado automaticamente (`petr3` → `PETR3.SA`)
+- **Resumo numérico** do ativo escolhido:
+  - último fechamento e variação no dia
+  - variação no período (%)
+  - máxima e mínima, com as datas
+  - volume médio diário
+  - dividendos no período e nos últimos 12 meses
+  - dividend yield (dividendos dos últimos 12 meses ÷ último preço)
+  - tabela com os **últimos 10 pregões** (abertura, máxima, mínima, fechamento e volume)
 - Gráficos do ativo escolhido:
   - **Fechamento** (preço ao fim de cada dia)
   - **Volume** negociado
@@ -24,19 +32,22 @@ financial_app/
 ├── app.py          # monta a página e organiza os componentes
 ├── ativos.py       # listas de moedas e ações e período dos gráficos
 ├── dados.py        # consultas ao Yahoo Finance, cache e tratamento do código do ativo
-├── componentes.py  # carrossel de cotações e gráficos
+├── calculos.py     # indicadores numéricos e formatação (R$, volume)
+├── componentes.py  # carrossel, resumo numérico e gráficos
 ├── estilos.py      # CSS do carrossel e cores de alta/baixa
-└── test_dados.py   # testes automatizados com pytest
+├── test_dados.py   # testes do tratamento do código do ativo
+└── test_calculos.py # testes dos indicadores e da formatação
 ```
 
 Cada arquivo tem uma responsabilidade:
 
-| Para...                               | altere                                    |
-|---                                    |---                                        |
-| incluir ou remover ações e moedas     | `ativos.py`                               |
-| mudar o período dos gráficos          | `ativos.py` (`DATA_INICIO` e `DATA_FIM`)  |
-| trocar a fonte de dados               | `dados.py`                                |
-| mudar cores, velocidade ou aparência  | `estilos.py` e `componentes.py`           |
+| Para... | altere |
+|---|---|
+| incluir ou remover ações e moedas | `ativos.py` |
+| mudar o período dos gráficos | `ativos.py` (`DATA_INICIO` e `DATA_FIM`) |
+| trocar a fonte de dados | `dados.py` |
+| criar ou mudar um indicador numérico | `calculos.py` |
+| mudar cores, velocidade ou aparência | `estilos.py` e `componentes.py` |
 
 ## Como executar
 
@@ -63,7 +74,11 @@ O app abre no navegador em `http://localhost:8501`.
 pytest
 ```
 
-Os testes conferem o tratamento do código digitado pelo usuário: letras minúsculas, espaços e a presença ou ausência do `.SA`.
+Os testes conferem:
+
+- o tratamento do código digitado pelo usuário (letras minúsculas, espaços, presença ou ausência do `.SA`);
+- o cálculo dos indicadores (variação, máxima, mínima, dividendos, dividend yield);
+- a formatação no padrão brasileiro (`R$ 1.234,50`, `12,3 mi`).
 
 ## Tecnologias
 
